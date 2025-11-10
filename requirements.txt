@@ -1,0 +1,23 @@
+# --- Web Framework ---
+fastapi
+uvicorn
+
+# --- PDF Handling ---
+pymupdf
+
+# --- Vector Database ---
+chromadb
+duckdb  # optional, for persistence
+
+# --- Embeddings & Text Processing ---
+sentence-transformers
+langchain
+langchain-community
+
+# --- Groq API Client ---
+groq
+
+# --- Utilities ---
+python-dotenv
+tqdm
+typing-extensions
