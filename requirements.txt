@@ -21,3 +21,6 @@ groq  # Groq API client
 python-dotenv  # load .env config
 tqdm  # progress bars (e.g., during embedding)
 typing-extensions  # for compatibility and type hints
+
+# --- File Upload Handling ---
+python-multipart # required for FastAPI file uploads
