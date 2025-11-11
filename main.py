@@ -1,9 +1,13 @@
 import os
 import uuid
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from pydantic import BaseModel
 from utils.pdf_utils import extract_text_from_pdf, chunk_text
 from utils.embedding_utils import store_chunks
+from utils.rag_pipeline import ask_question
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = FastAPI(title="RAG Chatbot with Groq")
 
@@ -31,7 +35,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     all_text = " ".join([p["text"] for p in pages if "text" in p])
     chunks = chunk_text(all_text)
 
-    # Store chunks (e.g., in a vector DB or embedding store)
+
     stored_count = store_chunks(file_id, chunks)
 
     return {
@@ -40,3 +44,12 @@ async def upload_pdf(file: UploadFile = File(...)):
         "chunks_created": len(chunks),
         "chunks_stored": stored_count
     }
+
+class ChatRequest(BaseModel):
+    question: str
+    document_id: str
+
+@app.post("/chat")
+async def chat_with_pdf(req: ChatRequest):
+    answer, sources = ask_question(req.question, req.document_id)
+    return {"answer": answer, "sources": sources}

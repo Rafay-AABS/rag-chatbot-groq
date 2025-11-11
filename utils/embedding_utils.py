@@ -1,11 +1,9 @@
 import chromadb
 from chromadb.utils import embedding_functions
 
-# Initialize Chroma client and collection
 chroma_client = chromadb.Client()
 collection = chroma_client.get_or_create_collection("pdf_docs")
 
-# Use default embedding function (for now, small & local)
 embedding_fn = embedding_functions.DefaultEmbeddingFunction()
 
 def store_chunks(document_id, chunks):
