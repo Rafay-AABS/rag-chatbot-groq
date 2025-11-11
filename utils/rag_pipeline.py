@@ -2,14 +2,6 @@ from utils.embedding_utils import collection, embedding_fn
 import os
 from groq import Groq
 
-import os
-from groq import Groq
-from utils.embedding_utils import collection, embedding_fn
-
-import os
-from groq import Groq
-from utils.embedding_utils import collection, embedding_fn
-
 def ask_question(question: str, document_id: str, top_k=3):
     # Initialize Groq client
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
