@@ -1,23 +1,23 @@
 # --- Web Framework ---
 fastapi
-uvicorn
+uvicorn[standard]  # adds autoreload, logging, etc.
 
 # --- PDF Handling ---
-pymupdf
+pymupdf  # (imported as "fitz")
 
 # --- Vector Database ---
 chromadb
-duckdb  # optional, for persistence
+duckdb  # optional, enables local persistence for Chroma
 
 # --- Embeddings & Text Processing ---
 sentence-transformers
 langchain
 langchain-community
 
-# --- Groq API Client ---
-groq
+# --- LLM Integration ---
+groq  # Groq API client
 
 # --- Utilities ---
-python-dotenv
-tqdm
-typing-extensions
+python-dotenv  # load .env config
+tqdm  # progress bars (e.g., during embedding)
+typing-extensions  # for compatibility and type hints
