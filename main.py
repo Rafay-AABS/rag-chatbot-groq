@@ -2,9 +2,9 @@ import os
 import uuid
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
-from utils.pdf_utils import extract_text_from_pdf, chunk_text
-from utils.embedding_utils import store_chunks
-from utils.rag_pipeline import ask_question
+from utils.pdf_utils import PDFProcessor
+from utils.embedding_utils import EmbeddingStore
+from utils.rag_pipeline import RAGPipeline
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,6 +13,10 @@ app = FastAPI(title="RAG Chatbot with Groq")
 
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+pdf_processor = PDFProcessor()
+embedding_store = EmbeddingStore()
+rag_pipeline = RAGPipeline()
 
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
@@ -27,16 +31,16 @@ async def upload_pdf(file: UploadFile = File(...)):
         f.write(await file.read())
 
     # Extract text from PDF
-    pages = extract_text_from_pdf(file_path)
+    pages = pdf_processor.extract_text_from_pdf(file_path)
     if not pages:
         raise HTTPException(status_code=400, detail="No text could be extracted from the PDF.")
 
     # Combine and chunk text
     all_text = " ".join([p["text"] for p in pages if "text" in p])
-    chunks = chunk_text(all_text)
+    chunks = pdf_processor.chunk_text(all_text)
 
 
-    stored_count = store_chunks(file_id, chunks)
+    stored_count = embedding_store.store_chunks(file_id, chunks)
 
     return {
         "document_id": file_id,
@@ -51,5 +55,5 @@ class ChatRequest(BaseModel):
 
 @app.post("/chat")
 async def chat_with_pdf(req: ChatRequest):
-    answer, sources = ask_question(req.question, req.document_id)
+    answer, sources = rag_pipeline.ask_question(req.question, req.document_id)
     return {"answer": answer, "sources": sources}
