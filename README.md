@@ -280,5 +280,3 @@ Project Link: [https://github.com/Rafay-AABS/rag-chatbot-groq](https://github.co
 ⭐ If you find this project helpful, please give it a star!
 
 ---
-
-**Made by Abdur Rafay ([email](mailto:abdur.rafay@artificialautomationbizsol.com))**
